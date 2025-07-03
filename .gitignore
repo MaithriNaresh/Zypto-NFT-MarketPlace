@@ -1,0 +1,16 @@
+# Ignore sensitive environment files
+.env
+*/.env
+backend/.env
+
+# Node modules
+node_modules/
+
+# Build folders
+dist/
+build/
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
