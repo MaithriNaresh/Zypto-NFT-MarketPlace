@@ -1,0 +1,240 @@
+
+:root {
+    --delay: 0s;
+    --sidebar-width: 220px;
+    --color-data-up: #00c288;
+    --color-data-down: #dc3545;
+    --color-dark: #212529;
+    --preset-1: rgb(13, 110, 253);
+	--color-pink: #e6308a;
+	--color-orange: #d54f01;
+	--color-blue: #0461cf;
+	--color-green: #22a53c;
+	--color-purple: #5928ed;
+	--color-red: #dc143c;
+}
+
+@font-face {
+  font-family: 'titulo';
+  src: url('https://files.jcink.net/uploads2/polyhymn/Stalysta_personal_use.ttf');
+}
+
+@import url('../../../unpkg.com/normalize.css%408.0.1/normalize.css') layer(normalize);
+
+/* @layer normalize foundation; */
+
+@layer attributes {
+
+	.attributes {
+		position: absolute;
+		top: 80%;
+		left: 40%;
+		z-index: 1;
+	}
+	.attribute {
+		--font-size: 2rem;
+		--hue: 10;
+		--ox: 0;
+		--oy: 0;
+		--dx: 0;
+		--dy: 0;
+		--or: 0;
+		--dr: 0;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: var(--font-size);
+		border: 1px solid hsl(var(--hue) 100% 80%);
+		padding: 8px 14px !important;
+		border-radius: 14px;
+		position: absolute;
+		bottom: 0%;
+		left: 0%;
+		translate: 0% 0%;
+		background: #000000;
+		color: hsl(var(--hue) 100% 40% / 0.8);
+		box-shadow: 1px -1px 0.5rem 0rem hsl(var(--hue) 100% 30%) inset;
+		transform: translate(var(--ox), var(--oy)) rotate(var(--or))
+	}
+
+	.attribute:nth-of-type(1) {
+		--hue: 10;
+		--ox: 10%;
+		--oy: 0%;
+		--or: 7deg;
+	}
+	.attribute:nth-of-type(2) {
+		--hue: 60;
+		--ox: 10%;
+		--oy: -5%;
+		--or: 12deg;
+	}
+	.attribute:nth-of-type(3) {
+		--hue: 180;
+		--ox: -20%;
+		--oy: -23%;
+		--or: -10deg;
+	}
+	.attribute:nth-of-type(4) {
+		--hue: 120;
+		--ox: -13%;
+		--oy: 6%;
+		--or: 15deg;
+	}
+	.attribute:nth-of-type(5) {
+		--hue: 210;
+		--ox: -21%;
+		--oy: 18%;
+		--or: 10deg;
+	}
+	.attribute:nth-of-type(6) {
+		--hue: 280;
+		--ox: 15%;
+		--oy: 5%;
+		--or: -8deg;
+	}
+
+	.attribute svg {
+		width: var(--font-size);
+		stroke-width: 2;
+	}
+}
+
+.gsap-text {
+  position: relative;
+  width: 100%;
+  height: 30vh;
+}
+.gsap-text.meme {
+	position: relative;
+	width: 100%;
+	height: auto;
+  }
+.gsap-text .scroll {
+  width: 100%;
+  display: flex;
+}
+.gsap-text .scroll div {
+  color: var(--brand-color);
+  font-size: 4em;
+  font-weight: 900;
+  white-space: nowrap;
+  text-transform: uppercase;
+  animation: animate 40s linear infinite;
+  animation-delay: -40s;
+}
+.gsap-text .scroll div:nth-child(2) {
+  animation: animate2 40s linear infinite;
+  animation-delay: -20s;
+}
+.gsap-text .scroll div span {
+  -webkit-text-stroke: 2px var(--card-color);
+  color: transparent;
+}
+@keyframes animate {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+@keyframes animate2 {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-200%);
+  }
+}
+.gsap-text .scroll.text1 {
+  transform: rotate(2deg) translateY(200px) translateX(-200px);
+}
+.gsap-text .scroll.text2 {
+	transform: none;
+	padding-top: 20px;
+}
+.gsap-text .scroll.text3 div{
+	font-size: 4em;
+	white-space: nowrap;
+}
+.gsap-text .scroll.text3 div span {
+	-webkit-text-stroke: 1.2px #000000;
+	color: transparent;
+.meme-chart { margin: -.5em auto; text-align:center; width: 90%; height: 390px }
+
+}
+
+@property --angle {
+	syntax: "<angle>";
+	initial-value: 0deg;
+	inherits: false;
+}
+@property --x {
+	syntax: "<percentage>";
+	initial-value: 0%;
+	inherits: false;
+}
+
+/* Gravity pillss */
+.tag-canvas {
+	height: 100%;
+	position: relative;
+}
+
+.gravity-pills {
+  position: absolute;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  height: 40px;
+  font-family: var(--global-font);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+}
+
+/* Custom colors for gravity-pillss */
+.gravity-pills:nth-child(1) {
+	background-color: var(--brand-color);
+  }
+.gravity-pills:nth-child(2) {
+  background-color: var(--color-pink);
+}
+
+.gravity-pills:nth-child(3) {
+  background-color: var(--color-orange);
+}
+
+.gravity-pills:nth-child(4) {
+  background-color: var(--color-blue);
+}
+
+.gravity-pills:nth-child(5) {
+  background-color: var(--color-green);
+}
+
+.gravity-pills:nth-child(6) {
+  background-color: var(--color-purple);
+}
+
+.gravity-pills:nth-child(7) {
+  background-color: var(--color-red);
+}
+
+.gravity-pills:nth-child(8) {
+  background-color: var(--color-green);
+}
+.gravity-pills:nth-child(9) {
+  background-color: var(--color-blue);
+}
+.gravity-pills:nth-child(10) {
+  background-color: var(--color-data-down);
+}
+
