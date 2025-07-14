@@ -2,7 +2,10 @@ import  { useState } from "react";
 import axios from "axios";
 import SideComponent from "./Componets/SideComponent";
 import HeaderComponet from "./Componets/HeaderComponet";
+import { useNavigate } from "react-router-dom";
+
 const TraderForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     accountHolderName: "",
     accountNumber: "",
@@ -58,6 +61,7 @@ const TraderForm = () => {
         },
       });
       alert("Trader request submitted!");
+       navigate("/profile")
     } catch (err) {
       console.error(err);
       alert("Submission failed");

@@ -19,7 +19,7 @@ export const BidItemPanel = () => {
              alert("Bid amount , nftId and userID missing!");
                   return;
                           }
-            const response = await axios.post("http://localhost:5656/buyNft" , {
+            const response = await axios.post("http://localhost:5656/create_order" , {
                 amount: amount
             });
             console.log(response.data);

@@ -15,6 +15,7 @@ import Header from './pages/Components/Header';
 import Upload from './pages/Upload';
 import UCollectionDetail from './pages/UCollectionDetail';
 import AdminTraderList from './pages/AdminTraderList';
+import CurrencyDetail from './pages/CurrencyDetail';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -35,6 +36,7 @@ function App() {
 		<Route path='/usercollections' element={<UserCollections></UserCollections>}></Route>
 		<Route path="/ucollectionDetail/:collectionId" element={<UCollectionDetail></UCollectionDetail>}></Route>
 		<Route path='/adminTraderList/:uid' element={<AdminTraderList></AdminTraderList>}></Route>
+		<Route path='/currencyDetail' element={<CurrencyDetail></CurrencyDetail>}></Route>
 	</Routes>
 	</BrowserRouter>
     

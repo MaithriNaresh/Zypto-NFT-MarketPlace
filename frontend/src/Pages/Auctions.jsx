@@ -5,6 +5,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import FooterComponent from './Componets/FooterComponent'
 const Auctions = () => {
   const [auction, setAuction] = useState([]);
   const fetchAuction = async () => {
@@ -299,6 +300,7 @@ const Auctions = () => {
             })}
         </div>
       </div>
+      <FooterComponent></FooterComponent>
     </div>
   );
 };

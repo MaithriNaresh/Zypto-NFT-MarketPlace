@@ -51,28 +51,28 @@ const SideComponent = () => {
                             </svg>                                
                         </a>
                         
-                        <a className="sidebar-link" href="launchpad.html" tabIndex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Launchpad">
+                        <Link className="sidebar-link" to="/auction" tabIndex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Launchpad">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <path opacity="0.4" d="M7.1099 5.95979L16.1299 2.94979C20.1799 1.59979 22.3799 3.80979 21.0399 7.85979L18.0299 16.8798C16.0099 22.9498 12.6899 22.9498 10.6699 16.8798L9.7799 14.1998L7.0999 13.3098C1.0399 11.2998 1.0399 7.98979 7.1099 5.95979Z" fill="currentColor"/>
                                 <path d="M12.1201 11.6301L15.9301 7.81006L12.1201 11.6301Z" fill="currentColor"/>
                                 <path d="M12.1201 12.38C11.9301 12.38 11.7401 12.31 11.5901 12.16C11.3001 11.87 11.3001 11.39 11.5901 11.1L15.3901 7.28C15.6801 6.99 16.1601 6.99 16.4501 7.28C16.7401 7.57 16.7401 8.05 16.4501 8.34L12.6501 12.16C12.5001 12.3 12.3101 12.38 12.1201 12.38Z" fill="currentColor"/>
                             </svg>
-                        </a>
+                        </Link>
                         
-                        <a className="sidebar-link" href="my-nfts.html" tabIndex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="My NFTs">
+                        <Link className="sidebar-link" to="/product" tabIndex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="My NFTs">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <path opacity="0.4" d="M22.0199 16.8198L18.8899 9.49978C18.3199 8.15978 17.4699 7.39978 16.4999 7.34978C15.5399 7.29978 14.6099 7.96978 13.8999 9.24978L11.9999 12.6598C11.5999 13.3798 11.0299 13.8098 10.4099 13.8598C9.77989 13.9198 9.14989 13.5898 8.63989 12.9398L8.41989 12.6598C7.70989 11.7698 6.82989 11.3398 5.92989 11.4298C5.02989 11.5198 4.25989 12.1398 3.74989 13.1498L2.01989 16.5998C1.39989 17.8498 1.45989 19.2998 2.18989 20.4798C2.91989 21.6598 4.18989 22.3698 5.57989 22.3698H18.3399C19.6799 22.3698 20.9299 21.6998 21.6699 20.5798C22.4299 19.4598 22.5499 18.0498 22.0199 16.8198Z" fill="currentColor"></path>
                                 <path d="M6.97009 8.38012C8.83681 8.38012 10.3501 6.86684 10.3501 5.00012C10.3501 3.13339 8.83681 1.62012 6.97009 1.62012C5.10337 1.62012 3.59009 3.13339 3.59009 5.00012C3.59009 6.86684 5.10337 8.38012 6.97009 8.38012Z" fill="currentColor"></path>
                             </svg>
-                        </a>
+                        </Link>
                         
-                        <a className="sidebar-link" href="my-collections.html" tabIndex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="My Collections">
+                        <Link className="sidebar-link" to="/mycollection" tabIndex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="My Collections">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <path d="M19.3302 5.67979L13.0602 2.29979C12.4002 1.93979 11.6002 1.93979 10.9402 2.29979L4.67018 5.67979C4.21018 5.92979 3.93018 6.40979 3.93018 6.95979C3.93018 7.49979 4.21018 7.98979 4.67018 8.23979L10.9402 11.6198C11.2702 11.7998 11.6402 11.8898 12.0002 11.8898C12.3602 11.8898 12.7302 11.7998 13.0602 11.6198L19.3302 8.23979C19.7902 7.98979 20.0702 7.50979 20.0702 6.95979C20.0702 6.40979 19.7902 5.92979 19.3302 5.67979Z" fill="currentColor"/>
                                 <path opacity="0.4" d="M9.91 12.79L4.07 9.87C3.62 9.65 3.1 9.67 2.68 9.93C2.25 10.2 2 10.65 2 11.15V16.66C2 17.61 2.53 18.47 3.38 18.9L9.21 21.82C9.41 21.92 9.63 21.97 9.85 21.97C10.11 21.97 10.37 21.9 10.6 21.76C11.03 21.5 11.28 21.04 11.28 20.54V15.03C11.29 14.07 10.76 13.21 9.91 12.79Z" fill="currentColor"/>
                                 <path opacity="0.4" d="M21.3202 9.93014C20.8902 9.67014 20.3702 9.64014 19.9302 9.87014L14.1002 12.7901C13.2502 13.2201 12.7202 14.0701 12.7202 15.0301V20.5401C12.7202 21.0401 12.9702 21.5001 13.4002 21.7601C13.6302 21.9001 13.8902 21.9701 14.1502 21.9701C14.3702 21.9701 14.5902 21.9201 14.7902 21.8201L20.6202 18.9001C21.4702 18.4701 22.0002 17.6201 22.0002 16.6601V11.1501C22.0002 10.6501 21.7502 10.2001 21.3202 9.93014Z" fill="currentColor"/>
                             </svg>                                
-                        </a>
+                        </Link>
                         
                         <a className="sidebar-link trending" href="activity.html" tabIndex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Activity">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">

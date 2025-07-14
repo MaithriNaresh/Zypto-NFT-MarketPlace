@@ -654,7 +654,7 @@ const Upload = () => {
                                     </label>
                                     <input
                                       className="nftmax__item-input"
-                                      type="text"
+                                      type="number"
                                       placeholder="0%"
                                       required
                                       name="discount"

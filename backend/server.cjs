@@ -9,7 +9,7 @@ const session = require("express-session");
 const passport = require("passport");
 const dotenv = require("dotenv");
 const authRoutes = require("./auth");
-const port = 5656;
+// const port = 5656;
 const secretkey = "Zypto@123";
 const app = express();
 dotenv.config();
@@ -27,7 +27,7 @@ const razorpay = new Razorpay({
   key_secret: "DVOPqUM5LuEDdiahHsmixmLL",
 });
 
-mongoose.connect("mongodb://localhost:27017/zypto").then(() => {
+mongoose.connect(process.env.MONGO_DB).then(() => {
   console.log("MongoDB Connected");
 });
 
@@ -40,13 +40,24 @@ const regShema = new mongoose.Schema({
   password: String,
   image: {
     type: String,
-    default: "https://www.pngwing.com/en/free-png-agvlo",
+    default: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
   },
   istrader: {
     type: Boolean,
     default: false,
   },
-});
+  followers:{type:["String"],
+    default:[]
+  },
+  following:{type:["String"],
+    default:[]
+  }
+},
+{
+  timestamps: true
+}
+);
+
 //nftSchema
 const nftSchema = new mongoose.Schema({
   name: String,
@@ -133,12 +144,25 @@ const traderSchema = new mongoose.Schema({
    }
 
 });
+  
+const createCurrencySchema = new mongoose.Schema({
+  currencyName : "String",
+  amount: Number,
+  uid:String,
+  quantity: Number,
+  createDate: {
+    type:Date,
+    default:Date.now
+  }
+})
 
-const collectionModel = mongoose.model("collections", collectionShema);
 const userSignIn = mongoose.model("userRegister", regShema);
+const collectionModel = mongoose.model("collections", collectionShema);
+
 const nftModel = mongoose.model("nfts", nftSchema);
 const auctionModel = mongoose.model("createauction", auctionSchema);
 const traderModel = mongoose.model("bcomeatrader",traderSchema);
+const createCurrencyModel = mongoose.model("createcryptocurrency" , createCurrencySchema);
 // ==== Middleware to verify token ====
 
 function verifyToken(req, res, next) {
@@ -174,19 +198,23 @@ const upload = multer({ storage });
 
 // ==== Routes ====
 
+
 app.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
   const response = new userSignIn({ name, email, password });
   const result = await response.save();
   res.send(result);
-});
-
+})
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  const response = await userSignIn.findOne({ email, password });
+  const response = await userSignIn.findOne({ email });
 
   if (!response) {
-    return res.status(401).send({ message: "Invalid email or password" });
+    return res.status(401).send({ message: "Invalid email" });
+  }
+
+  if(response.password !== password){
+    return res.status(401).send({ message: "Invalid password" });
   }
 
   const payload = {
@@ -223,7 +251,7 @@ app.post("/addnft", verifyToken, upload.single("image"), async (req, res) => {
       req.body;
     const userid = req.user.id;
 
-    const image = `http://localhost:${port}/uploads/${req.file.filename}`;
+    const image = `http://localhost:${process.env.PORT}/uploads/${req.file.filename}`;
 
     const response = new nftModel({
       name,
@@ -353,7 +381,7 @@ app.put("/updateuser/:id", upload.single("image"), async (req, res) => {
   if (req.body.trader !== undefined) updateData.trader = req.body.trader;
 
   if (req.file) {
-    updateData.image = `http://localhost:${port}/uploads/${req.file.filename}`;
+    updateData.image = `http://localhost:${process.env.PORT}/uploads/${req.file.filename}`;
   }
 
   try {
@@ -396,7 +424,7 @@ app.delete("/deletetrader/:id", async (req, res) => {
 app.post("/addcollection", upload.single("image"), async (req, res) => {
   const { name, status, userid } = req.body;
 
-  const image = `http://localhost:${port}/uploads/${req.file.filename}`;
+  const image = `http://localhost:${process.env.PORT}/uploads/${req.file.filename}`;
   const response = new collectionModel({
     name,
     image,
@@ -461,6 +489,23 @@ app.get("/getcollectionwithnft", async (req, res) => {
     res.status(500).send("Error fetching collections");
   }
 });
+
+app.get("/getcollectionwithnft/:userid", async(req , res)=>{
+  const {userid} = req.params;
+  const collectionData = await collectionModel.aggregate([
+      {$match:{userid:userid}},
+      {
+        $lookup:{
+          from:"nfts",
+          localField:"_id",
+          foreignField:"collectionid",
+          as: "nfts"
+        }
+      },
+
+  ]);
+  res.json(collectionData);
+})
 app.delete("/deletenft/:nftid", async (req, res) => {
   const { nftid } = req.params;
   const response = await nftModel.deleteOne({ _id: nftid });
@@ -824,7 +869,7 @@ app.put("/transferNFTOwnerShip", async (req, res)=>{
 
 })
 // ==== Start Server ====
-app.post("/buyNft", async(req, res)=>{
+app.post("/create_order", async(req, res)=>{
   const {amount} = req.body;
 
    if (!amount || isNaN(amount)) {
@@ -860,9 +905,9 @@ app.post("/trader",
     adhaarNo,
   } = req.body;
   const idProof =  req.files?.idProof?.[0] &&
-        `http://localhost:${port}/uploads/${req.files.idProof[0].filename}`;
+        `http://localhost:${process.env.PORT}/uploads/${req.files.idProof[0].filename}`;
   const passportSizePhoto =  req.files?.passportSizePhoto?.[0] &&
-        `http://localhost:${port}/uploads/${req.files.passportSizePhoto[0].filename}`;      
+        `http://localhost:${process.env.PORT}/uploads/${req.files.passportSizePhoto[0].filename}`;      
   try{
   const newTrader = new traderModel({ uid,
     bankdetails: {
@@ -938,8 +983,97 @@ app.put("/acceptTrader/:id", async (req, res) => {
   console.log("User Update Result:", updateUser);
 });
 
+
+app.put("/follow/:id", async (req, res)=>{
+    const id = req.params.id;
+    const {currentUserid} = req.body;
+
+    if(id === currentUserid){
+     return res.status(403).json({message:"Action forbidden"});
+    }else{
+      try {
+        const followUser = await userSignIn.findById(id);
+        const followingUser = await userSignIn.findById(currentUserid);
+  
+        if(!followUser.followers?.includes(currentUserid)){
+         await  followUser.updateOne({$push:{followers:currentUserid}});
+         await followingUser.updateOne({$push:{following:id}});
+        return res.status(200).json({message:"User followed!"});
+        }
+      } catch (error) {
+        res.status(500).json(error)
+      }
+    }
+});
+
+app.put("/unfollow/:id", async (req, res)=>{
+
+    const id = req.params.id;
+    const {currentUserid} = req.body;
+
+    if(id === currentUserid){
+     return res.status(403).json({message:"Action forbidden"});
+    }else{
+      try {
+        const followUser = await userSignIn.findById(id);
+        const followingUser = await userSignIn.findById(currentUserid);
+  
+        if(followUser.followers?.includes(currentUserid)){
+         await  followUser.updateOne({$pull:{followers:currentUserid}});
+         await followingUser.updateOne({$pull:{following:id}});
+        return res.status(200).json({message:"User Unfollowed!"});
+        }else{
+         return res.status(403).json({message:"User already followed by you"});
+        }
+      } catch (error) {
+        res.status(500).json(error)
+      }
+    }
+})
+
+// Example backend route
+app.get("/getfollowers/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await userSignIn.findById(id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const followers = await Promise.all(
+      user.followers.map((followerId) => userSignIn.findById(followerId))
+    );
+
+    res.status(200).json(followers);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
+
+app.post("/addcurrency", async(req , res)=>{
+  const {currencyName , amount ,quantity, uid} = req.body;
+
+    try{
+     const result = new createCurrencyModel({
+    currencyName: currencyName,
+    amount : amount,
+    quantity: quantity,
+    uid:uid
+  });
+   const savedCurrency = await result.save();
+   res.status(200).json({
+        message: "currency added successfully",       
+        savedCurrency,
+      });
+  console.log(savedCurrency)
+   
+  }catch(err){
+   console.error(err)
+  }
+  
+})
+
+
 app
-  .listen(port, () => {
-    console.log("Server is Running on port " + port);
+  .listen(process.env.PORT, () => {
+    console.log("Server is Running on port " + process.env.PORT);
   })
   .on("error", (err) => console.error("Server error:", err));

@@ -6,6 +6,9 @@ import {Link} from 'react-router-dom'
 const Header = () => {
 
   const[trader, setTrader] = useState([]);
+  const [wallet, setWallet] = useState({currencyName:"",currencyCurrentPrice:""});
+  
+  const [image, setImage] =useState()
   const fetchTrader= async()=>{
    const result = await axios.get("http://localhost:5656/gettrader");
    console.log(await result.data)
@@ -24,8 +27,32 @@ const Header = () => {
         if(differentDays < 1) return  `${differentInMin} minute${differentInMin<1 ? "s" : ""} ago`;
         return `${differentDays} days ${differentDays < 1  ? "s" : ""} ago` 
   }
+ 
+  const handleChangeWallet = (e)=>{
+    const {name, value} = e.target;
+    setWallet((preVal)=>({...preVal, [name]:value}));
+    console.log(wallet);
+  }
+
+  const handleWalletSubmit = async(e)=>{
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("currencyName",wallet.currencyName);
+    formData.append("currencyCurrentPrice",wallet.currencyCurrentPrice)
+    formData.append("image",image);
+   try{ const response = await axios.post(`http://localhost:6363/addcurrencytoWallet`, formData);
+     setWallet({currencyName:"",currencyCurrentPrice:""});
+    alert(await response.data)}
+   
+    catch(error){
+      console.log(error.message);
+    }
+  }
+ 
+
   useEffect(()=>{
-    fetchTrader()
+    fetchTrader();
+    
     // console.log("TrsderLength: " ,pendingTraders.length)
   },[])
   const pendingTraders = trader.filter(t => t.request === "pending");
@@ -66,114 +93,80 @@ const Header = () => {
                 <div className="nftmax-header__right">
                   <div className="nftmax-header__group">
                     {/* <!-- Search Form --> */}
+                    
                     <div className="nftmax-header__amount">
-                      <div className="nftmax-amount__icon">
-                        <img src="img/bag-icon.svg" alt="#" />
+                      <div className="nftmax-amount__icon">                        
+                        <h4 className='modal-title text-white'>Create Currency</h4>
                       </div>
-                      <div className="nftmax-amount__digit">
-                        <span>$</span> 234,435.34
-                      </div>
+                      
+                      
+                      
                       <div className="nftmax-header__plus">
                         <a href="#"><img src="img/plus-icon.svg" alt="#" /></a>
                       </div>
-                      {/* <!-- NFTMax Balance Hover --> */}
                       <div className="nftmax-balance">
-                        <h3 className="nftmax-balance__title">Your Balance</h3>
-                        {/* <!-- NFTMax Balance List --> */}
-                        <ul className="nftmax-balance_list">
-                          <li>
-                            <div className="nftmax-balance-info">
-                              <div className="nftmax-balance__img">
-                                <img src="img/wallet-1.png" alt="#" />
-                              </div>
-                              <h4 className="nftmax-balance-name">MetaMask</h4>
-                            </div>
-                            <div className="nftmax-balance-amount">
-                              <h4
-                                className="nftmax-balance-amount nftmax-scolor"
-                              >
-                                75,320 ETH
-                                <span className="nftmax-balance-usd"
-                                  >(773.69 USD)</span
-                                >
-                              </h4>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="nftmax-balance-info">
-                              <div className="nftmax-balance__img">
-                                <img src="img/wallet-2.png" alt="#" />
-                              </div>
-                              <h4 className="nftmax-balance-name">
-                                Coinbase Wallet
-                              </h4>
-                            </div>
-                            <div className="nftmax-balance-amount">
-                              <h4
-                                className="nftmax-balance-amount nftmax-scolor"
-                              >
-                                56,124 ETH
-                                <span className="nftmax-balance-usd"
-                                  >(773.69 USD)</span
-                                >
-                              </h4>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="nftmax-balance-info">
-                              <div className="nftmax-balance__img">
-                                <img src="img/wallet-3.png" alt="#" />
-                              </div>
-                              <h4 className="nftmax-balance-name">Bitski</h4>
-                            </div>
-                            <div className="nftmax-balance-amount">
-                              <h4
-                                className="nftmax-balance-amount nftmax-scolor"
-                              >
-                                56,124 ETH
-                                <span className="nftmax-balance-usd"
-                                  >(773.69 USD)</span
-                                >
-                              </h4>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="nftmax-balance-info">
-                              <div className="nftmax-balance__img">
-                                <img src="img/wallet-4.png" alt="#" />
-                              </div>
-                              <h4 className="nftmax-balance-name">
-                                WalletConnect
-                              </h4>
-                            </div>
-                            <div className="nftmax-balance-amount">
-                              <h4
-                                className="nftmax-balance-amount nftmax-scolor"
-                              >
-                                43,728 ETH
-                                <span className="nftmax-balance-usd"
-                                  >(773.69 USD)</span
-                                >
-                              </h4>
-                            </div>
-                          </li>
-                        </ul>
-                        {/* <!-- NFTMax Balance Button --> */}
-                        <div
-                          className="nftmax-balance__button"
-                          data-bs-toggle="modal"
-                          data-bs-target="#add_wallet"
-                        >
-                          <a
-                            href="#"
-                            className="nftmax-btn nftmax-btn__bordered bg radius"
-                            >Add Money</a
-                          >
-                        </div>
+                       
+                         <form className='form' onSubmit={(e)=>handleWalletSubmit(e)}>
+                         <div className="nftmax__item-form--group mb-0 ms-5 me-5">
+                                    <label className="nftmax__item-label text-secondary fs-6">
+                                      Currency Name
+                                    </label>
+                                    <input
+                                      className="nftmax__item-input"
+                                      type="text"
+                                      value={wallet.currencyName}
+                                      name = "currencyName"
+                                      placeholder="MetaMask"
+                                      onChange={(e) => handleChangeWallet(e)}
+                                      // value={nft.name}
+                                      required
+                                    />
+                                  </div>
+                            <div className="nftmax__item-form--group mb-0 ms-5 me-5">
+                                    <label className="nftmax__item-label text-secondary fs-6">
+                                      Amount
+                                    </label>
+                                    <input
+                                      className="nftmax__item-input"
+                                      type="number"
+                                      value={wallet.currencyCurrentPrice}
+                                      name = "currencyCurrentPrice"
+                                      placeholder="75,320 ETH"
+                                      onChange={(e) => handleChangeWallet(e)}
+                                      // value={nft.name}
+                                      required
+                                    />
+                                  </div>
+                                   <div className="nftmax__item-form--group mb-0 ms-5 me-5">
+                                    <label className="nftmax__item-label text-secondary fs-6">
+                                      Currency
+                                    </label>
+                                    <input
+                                      className="nftmax__item-input"
+                                      type="file"
+                                      name = "image"
+                                      // placeholder="75,320 ETH"
+                                      onChange={(e) => setImage(e.target.files[0])}
+                                      // value={nft.name}
+                                      required
+                                    />
+                                  </div>
+                                   <button
+                              className="nftmax__item-button--single nftmax-btn nftmax-btn__bordered bg radius nftmax-item__btn mb-0 ms-5 me-5 mt-5"
+                              type="submit"
+                            >
+                              Add Money
+                            </button>
+                            <Link to={"/currencyDetail"} className="text-decoration-none hover-black">Currency Detail</Link>
+                         </form>
+                       
+                       
                       </div>
-                      {/* <!-- End NFTMax Balance Hover --> */}
+                     
+
                     </div>
-                    {/* <!-- End Search Form --> */}
+                    
+                    {/* /*Notification */}
                     <div className="nftmax-header__group-two">
                       <div className="nftmax-header__right">
                         <div className="nftmax-header__alarm">

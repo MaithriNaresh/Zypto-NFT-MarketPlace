@@ -175,7 +175,7 @@ const CollectionDetail = () => {
                                                     {/* <!--- content --> */}
                                                    {nfts && nfts.map((e) =>{
                                                     return (
-                                                         <div className="nft-card-body d-sm-flex mt-2">
+                                                         <div className="nft-card-body d-sm-flex mt-2" key={e._id}>
                                                         {/* <!--- collection info --> */}
                                                         <div className="col-md-7">
                                                             <div className="d-flex gap-3 mb-4">
@@ -354,7 +354,7 @@ const CollectionDetail = () => {
                                                                         </svg>
                                                                     </a>
                                                                     <span className="vr disable-sm-screen"></span>
-                                                                    {/* <!--- instagram --> */}
+                                                               
                                                                     <a className="d-inline-flex gap-2 link-secondary text-bg-bs card-border redius px-2 py-1" href="#!" role="button">
                                                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                                                                             <path d="M11.999 7.37688C9.44495 7.37688 7.37595 9.44688 7.37595 11.9999C7.37595 14.5539 9.44495 16.6239 11.999 16.6239C14.551 16.6239 16.622 14.5539 16.622 11.9999C16.622 9.44688 14.551 7.37688 11.999 7.37688ZM11.999 15.0039C10.34 15.0039 8.99495 13.6589 8.99495 12.0009C8.99495 10.3419 10.34 8.99788 11.999 8.99788C13.658 8.99788 15.001 10.3419 15.001 12.0009C15.001 13.6589 13.658 15.0039 11.999 15.0039Z" fill="currentColor"></path>

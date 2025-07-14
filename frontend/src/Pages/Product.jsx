@@ -3,7 +3,7 @@ import axios from "axios";
 import HeaderComponet from "./Componets/HeaderComponet";
 import SideComponent from "./Componets/SideComponent";
 import { useNavigate } from "react-router-dom";
-
+import FooterComponent from "./Componets/FooterComponent"
 const Product = () => {
   const navigate = useNavigate();
   const [nft, setnft] = useState([]);
@@ -60,14 +60,14 @@ const Product = () => {
                   </tr>
                 </thead>
                 <tbody>
-
-                  {nft &&
-                    nft
+                
+                  {nft && nft.length > 0 ?
+                   ( nft
                     //  .filter((e) => e.userData?.istrader === true && e.status === "accept")
                      
                     .map((e) => {  
                       // if (e.status !== "accept") return null;
-                      //  console.log(e.userData?.istrader === true);
+                      //  console.log(e.userData?.istrader === true);                    
                       return (
                         <tr key={e._id}
                           className="align-middle"
@@ -289,7 +289,11 @@ const Product = () => {
 
                         </tr>
                       );
-                    })}
+                    })):( <tr>
+    <td colSpan="8" className="text-center py-3">
+      <h5 className="text-danger">No NFTs found</h5>
+    </td>
+  </tr>)}
 
                     
 
@@ -300,7 +304,7 @@ const Product = () => {
             </div>
           </div>
         </div>
-      </div>
+        <FooterComponent/>      </div>
     </>
   );
 };

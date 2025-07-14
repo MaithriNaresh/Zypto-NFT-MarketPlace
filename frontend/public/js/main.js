@@ -952,51 +952,51 @@ function toggle() {
 
 
 // Newsletter Signup Button
-$(document).mousemove(function (e) {
-  var $n = $(".signup-btn");
+// $(document).mousemove(function (e) {
+//   var $n = $(".signup-btn");
 
-  // If element doesn't exist, return early
-  if ($n.length === 0) return;
+//   // If element doesn't exist, return early
+//   if ($n.length === 0) return;
 
-  var mX = e.pageX;
-  var mY = e.pageY;
-  var from = { x: mX, y: mY };
+//   var mX = e.pageX;
+//   var mY = e.pageY;
+//   var from = { x: mX, y: mY };
 
-  var off = $n.offset();
-  var nx1 = off.left;
-  var ny1 = off.top;
-  var nx2 = nx1 + $n.outerWidth();
-  var ny2 = ny1 + $n.outerHeight();
+//   var off = $n.offset();
+//   var nx1 = off.left;
+//   var ny1 = off.top;
+//   var nx2 = nx1 + $n.outerWidth();
+//   var ny2 = ny1 + $n.outerHeight();
 
-  var maxX1 = Math.max(mX, nx1);
-  var minX2 = Math.min(mX, nx2);
-  var maxY1 = Math.max(mY, ny1);
-  var minY2 = Math.min(mY, ny2);
+//   var maxX1 = Math.max(mX, nx1);
+//   var minX2 = Math.min(mX, nx2);
+//   var maxY1 = Math.max(mY, ny1);
+//   var minY2 = Math.min(mY, ny2);
 
-  var intersectX = minX2 >= maxX1;
-  var intersectY = minY2 >= maxY1;
+//   var intersectX = minX2 >= maxX1;
+//   var intersectY = minY2 >= maxY1;
 
-  var to = {
-    x: intersectX ? mX : nx2 < mX ? nx2 : nx1,
-    y: intersectY ? mY : ny2 < mY ? ny2 : ny1,
-  };
+//   var to = {
+//     x: intersectX ? mX : nx2 < mX ? nx2 : nx1,
+//     y: intersectY ? mY : ny2 < mY ? ny2 : ny1,
+//   };
 
-  var distX = to.x - from.x;
-  var distY = to.y - from.y;
-  var hypot = Math.sqrt(distX * distX + distY * distY);
-  var final = Math.round(hypot);
+//   var distX = to.x - from.x;
+//   var distY = to.y - from.y;
+//   var hypot = Math.sqrt(distX * distX + distY * distY);
+//   var final = Math.round(hypot);
 
-  $("#distance_text").text(final);
+//   $("#distance_text").text(final);
 
-  const news = document.getElementById("news");
-  if (news) {
-    if (final === 0) {
-      news.classList.add("active");
-    } else {
-      news.classList.remove("active");
-    }
-  }
-});
+//   const news = document.getElementById("news");
+//   if (news) {
+//     if (final === 0) {
+//       news.classList.add("active");
+//     } else {
+//       news.classList.remove("active");
+//     }
+//   }
+// });
 
 
 // Popovers

@@ -36,7 +36,7 @@ const AdminTraderList = () => {
     {request : status}
    );
    alert(response.data.message);
-   fetchUser();
+   fetchTrader();
   }
 
   return (

@@ -12,11 +12,12 @@ import MyCollections from "./Pages/MyCollections";
 import AddCollections from "./Pages/AddCollections";
 import CollectionDetail from "./Pages/CollectionDetail";
 import AuctionForm from "./Pages/AuctionForm";
-import MarketPlace from "./Pages/MarketPlace";
 import SingleNft from "./Pages/SingleNft";
 import UserNft from "./Pages/UserNft";
 import TraderForm from "./Pages/TraderForm";
 import GoogleSuccess from "./Pages/GoogleSuccess";
+import TraderPage from "./TraderPage";
+import ConnectWalletModal from "./Pages/ConnectWalletModal";
 function App() {
   const [count, setCount] = useState(0);
 
@@ -30,7 +31,7 @@ function App() {
           <Route path="/auction" element={<Auction></Auction>}></Route>
           <Route path="/product" element={<Product></Product>}></Route>
           <Route path="/usernft" element={<UserNft></UserNft>}></Route>
-          <Route path="/marketplace" element={<MarketPlace></MarketPlace>}></Route>
+          <Route path="/traders" element={<TraderPage></TraderPage>}></Route>
           <Route path="/login" element={<Login></Login>}></Route>
           <Route path="/signUp" element={<SignIn></SignIn>}></Route>
           <Route path="/profile" element={<Profile></Profile>}></Route>
@@ -43,8 +44,10 @@ function App() {
           <Route path="/singlenft/:nftid" element={<SingleNft></SingleNft>}></Route>
           <Route path="/traderform" element={<TraderForm></TraderForm>}></Route>
            <Route path="/google-success" element={<GoogleSuccess />} />
+          
         </Routes>
       </BrowserRouter>
+      <ConnectWalletModal></ConnectWalletModal>
     </>
   );
 }

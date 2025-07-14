@@ -8,9 +8,9 @@ const SideBar = () => {
      <div className="nftmax-smenu">
         <div className="admin-menu">
             <div className="logo">
-						<a href="index.html">
+						<Link to="/">
 							<img className="nftmax-logo__main" src="img/logo-white.png" alt="#"/>
-						</a>
+						</Link>
 						<div className="nftmax__sicon close-icon"><img src="img/menu-toggle.svg" alt="#"/></div>
 					</div>
                     <div className="admin-menu__one">
