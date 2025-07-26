@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./App.css"
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home";
 import Auction from "./Pages/Auctions";
@@ -18,6 +19,8 @@ import TraderForm from "./Pages/TraderForm";
 import GoogleSuccess from "./Pages/GoogleSuccess";
 import TraderPage from "./TraderPage";
 import ConnectWalletModal from "./Pages/ConnectWalletModal";
+import CheckOutComponent from "./Pages/CheckOutComponent";
+
 function App() {
   const [count, setCount] = useState(0);
 
@@ -44,10 +47,11 @@ function App() {
           <Route path="/singlenft/:nftid" element={<SingleNft></SingleNft>}></Route>
           <Route path="/traderform" element={<TraderForm></TraderForm>}></Route>
            <Route path="/google-success" element={<GoogleSuccess />} />
-          
+          <Route path="/checkout/:id" element={<CheckOutComponent></CheckOutComponent>}></Route>
         </Routes>
       </BrowserRouter>
       <ConnectWalletModal></ConnectWalletModal>
+      {/* <CheckOutComponent></CheckOutComponent> */}
     </>
   );
 }

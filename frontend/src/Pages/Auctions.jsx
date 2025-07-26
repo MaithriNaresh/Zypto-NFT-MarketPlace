@@ -38,7 +38,7 @@ const Auctions = () => {
                     
                       <div className="d-flex justify-content-between align-items-center px-1 mb-1">
                         {/* <!-- minting --> */}
-                        <div className="d-flex align-items-center gap-2">
+                       { <div className="d-flex align-items-center gap-2">
                           <span
                             className="spinner-grow spinner-grow-sm text-success"
                             aria-hidden="true"
@@ -46,7 +46,7 @@ const Auctions = () => {
                           <span className="meta text-xs fw-medium grayscale-200">
                             Now
                           </span>
-                        </div>
+                        </div>}
                         {/* <!-- edition --> */}
                         <div className="flex">
                           <span className="meta text-xs grayscale-100 link-secondary bg-dark bg-opacity-25 redius p-1 px-2 mb-0">
@@ -88,11 +88,11 @@ const Auctions = () => {
                         {/* <!-- market --> */}
                       </div>
 
-                      {/* <!-- metadata --> */}
+                  
                       <div className="flex ps-2 pe-1 py-1">
-                        {/* <!-- artwork name --> */}
+                        
                         <div className="d-flex justify-content-between mb-2 mt-1">
-                          {/* <!-- title --> */}
+                        
                           <div className="text-truncate tt-1 fs-5 fw-bold link-secondary grayscale-200">
                             {auct.nftData.name}
                           </div>

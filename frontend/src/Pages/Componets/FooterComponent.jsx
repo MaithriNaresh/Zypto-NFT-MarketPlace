@@ -233,7 +233,7 @@ const FooterComponent = () => {
                       position: "absolute",
                       inset: "0px 0px auto auto",
                       margin: "0px",
-                      transform: "translate(0px, 38px);",
+                      transform: "translate(0px, 38px)",
                     }}
                   >
                     <span className="text-sm grayscale-500">Listing from</span>

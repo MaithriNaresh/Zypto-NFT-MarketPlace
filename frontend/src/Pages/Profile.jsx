@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import HeaderComponet from "./Componets/HeaderComponet";
 import SideComponent from "./Componets/SideComponent";
+import FooterComponent from "./Componets/FooterComponent"
 import { BidItemPanel } from "./Componets/BidItemPanel";
 import {CreateItems} from "./Componets/CreateItems";
 const Profile = () => {
@@ -4328,6 +4329,7 @@ const Profile = () => {
         </div>
         
       </section>
+      <FooterComponent></FooterComponent>
     </>
   );
 };

@@ -23,8 +23,8 @@ app.use(passport.session());
 app.use("/auth", authRoutes);
 
 const razorpay = new Razorpay({
-  key_id: "rzp_test_n0bEoHKAbPgvxy",
-  key_secret: "DVOPqUM5LuEDdiahHsmixmLL",
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
 mongoose.connect(process.env.MONGO_DB).then(() => {
@@ -150,11 +150,21 @@ const createCurrencySchema = new mongoose.Schema({
   amount: Number,
   uid:String,
   quantity: Number,
+  currencyImageUrl: String,
   createDate: {
     type:Date,
     default:Date.now
   }
-})
+});
+
+
+const userotpSchema = new mongoose.Schema({
+  uid: { type: String, required: true },
+  phone: { type: String, required: true },
+  name: { type: String, default: "Zypto User" },
+});
+
+const otpVerifyModel = mongoose.model("User", userotpSchema);
 
 const userSignIn = mongoose.model("userRegister", regShema);
 const collectionModel = mongoose.model("collections", collectionShema);
@@ -162,7 +172,7 @@ const collectionModel = mongoose.model("collections", collectionShema);
 const nftModel = mongoose.model("nfts", nftSchema);
 const auctionModel = mongoose.model("createauction", auctionSchema);
 const traderModel = mongoose.model("bcomeatrader",traderSchema);
-const createCurrencyModel = mongoose.model("createcryptocurrency" , createCurrencySchema);
+const createCurrencyModel = mongoose.model("buycurrency" , createCurrencySchema, "buycurrency");
 // ==== Middleware to verify token ====
 
 function verifyToken(req, res, next) {
@@ -591,6 +601,8 @@ app.get("/getAuctionsWithNft", async (req, res) => {
           preserveNullAndEmptyArrays: true,
         },
       },
+    
+     
     ]);
     res.json(auctions);
   } catch (err) {
@@ -649,6 +661,26 @@ app.get("/getAuctionsWithNft/:id", async (req, res) => {
           preserveNullAndEmptyArrays: true,
         },
       },
+        {
+        $addFields:{
+          collectionIdObj:{ $toObjectId:"$nftData.collectionid"}
+        }
+      },
+    {
+      $lookup:{
+        from:"collections",
+        localField:"collectionIdObj",
+        foreignField:"_id",
+        as:"collectionData",
+      }
+    },
+     {
+        $unwind: {
+          path: "$collectionData",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+     
     ]);
 
     if (auction.length === 0) {
@@ -841,7 +873,64 @@ app.get("/getbiddingnfts/:id", async (req, res) => {
     res.status(500).send("Error fetching bidding NFTs");
   }
 });
+app.get("/getSingleBiddingNfts/:nftId", async(req, res)=>{
+  const {nftId} = req.params;
+  try {
+    
+    const response = await auctionModel.aggregate([
+      {$match:{
+            nftid :nftId
+      }},
+      {
+        $addFields: {
+          nftidObj: { $toObjectId: "$nftid" },
+        },
+      },
+      {
+        $lookup:{from:"nfts",
+        localField:"nftidObj",
+        foreignField:"_id",
+        as:"nftData"
+      }},
+      {$unwind:{
+        path:"$nftData",
+        preserveNullAndEmptyArrays:true
+      }},
+      {
+        $addFields:{
+        userObjid:{ $toObjectId :"$nftData.userid"}
+      }},
+      {
+        $lookup:{
+        from:"userregisters",
+        localField:"userObjid",
+        foreignField:"_id",
+        as:"userData"
+      }},
+      {
+        $unwind:{
+        path:"$userData",
+        preserveNullAndEmptyArrays: true
+      }},
+      {$addFields: {
+        collectionObjid:{
+          $toObjectId: "$nftData.collectionid"
+        }
+      }},
+      { $lookup: {
+        from: "collections",
+        localField:"collectionObjid",
+        foreignField:"_id",
+        as:"collectionData"
+      }}
+    ])
 
+    res.send(response);
+  } catch (error) {
+    console.error("Error fetching bidding NFTs", error);
+    res.status(500).send("Error fetching bidding NFTs");
+  }
+})
 
 app.put("/transferNFTOwnerShip", async (req, res)=>{
   const {newownerId , nftid} = req.body;
@@ -869,25 +958,26 @@ app.put("/transferNFTOwnerShip", async (req, res)=>{
 
 })
 // ==== Start Server ====
-app.post("/create_order", async(req, res)=>{
-  const {amount} = req.body;
-
-   if (!amount || isNaN(amount)) {
-    return res.status(400).json({ message: "Amount is required and must be a number" });
-  }
-  const options = {
-    amount : amount * 100,
-    currency: "INR",
-      receipt: "receipt_order_" + Math.floor(Math.random() * 10000)
-  };
-  try{
+app.post("/create_order", async (req, res) => {
+  const { amount } = req.body;
+   const options = {
+      amount: amount * 100,
+      currency: "INR",
+      receipt: "101",
+    };
+   try {
     const order = await razorpay.orders.create(options);
     res.send(order);
+   } catch (error) {
+    console.error(error)
+   }
+ 
 
-  }catch(err){
-   console.error(err)
-  }
-})
+  
+});
+
+
+
 app.post("/trader",
   upload.fields([
     { name: "idProof", maxCount: 1 },
@@ -1047,16 +1137,50 @@ app.get("/getfollowers/:id", async (req, res) => {
     res.status(500).json({ message: "Server error", error: err });
   }
 });
+app.post("/buy_currency", async (req, res) => {
+  const { amount , uid} = req.body;
+  if(!uid){return res.status(401).json({message:"user Required"})};
+  if(!amount || isNaN(amount)){return res.status(400).json({message:"Amount Invalid"})};
+  try {
+    const user = userSignIn.findById({uid})
+    if(!user){return res.status(401).json({message:"invalid user"})}
+    const options = {
+      amount: amount * 100,
+      currency: "INR",
+      receipt: "receipt_" + Date.now(),
+    };
 
+    const order = await razorpay.orders.create(options);
+    res.status(200).json(order)
+  } catch (err) {
+   console.log("Razorpay error" , err.error || err);
+    return res.status(500).json({
+      message: "Failed to create order",
+      error: err?.error?.description || err.message,
+    });
+    
+  }
+   
+   try {
+    const order = await razorpay.orders.create(options);
+    res.send(order);
+   } catch (error) {
+    console.error(error)
+   }
+ 
+
+  
+});
 app.post("/addcurrency", async(req , res)=>{
-  const {currencyName , amount ,quantity, uid} = req.body;
+  const {currencyName , amount ,quantity, uid,currencyImageUrl} = req.body;
 
     try{
      const result = new createCurrencyModel({
     currencyName: currencyName,
     amount : amount,
     quantity: quantity,
-    uid:uid
+    uid:uid,
+    currencyImageUrl: currencyImageUrl
   });
    const savedCurrency = await result.save();
    res.status(200).json({
@@ -1070,6 +1194,90 @@ app.post("/addcurrency", async(req , res)=>{
   }
   
 })
+
+app.get("/getWallet/:id", async (req , res)=>{
+  const {id} = req.params;
+  const response = await createCurrencyModel.find({uid:id});
+  res.status(200).json(response);
+})
+
+app.post("/buyNft", async (req, res) => {
+  const { nftId, buyerId, currencyName, amount } = req.body;
+
+  try {
+    const wallet = await walletModel.findOne({
+      userid: buyerId,
+      currencyName: currencyName,
+    });
+
+    if (!wallet || wallet.quantity < amount) {
+      return res.status(400).send("Insufficient balance");
+    }
+
+    // Deduct currency
+    wallet.quantity -= amount;
+    await wallet.save();
+
+    // Optional: mark NFT as sold
+    await nftModel.findByIdAndUpdate(nftId, {
+      owner: buyerId,
+      status: "sold",
+    });
+
+    res.send("NFT purchased successfully");
+  } catch (error) {
+    console.error("Purchase error:", error);
+    res.status(500).send("Error during NFT purchase");
+  }
+});
+app.put("/deductcurrency/:id", async (req, res) => {
+  const { amountToDeduct } = req.body;
+  const walletId = req.params.id;
+
+  try {
+    const wallet = await createCurrencyModel.findById(walletId);
+
+    if (!wallet) {
+      return res.status(404).json({ message: "Wallet not found" });
+    }
+
+    if (wallet.quantity < amountToDeduct) {
+      return res.status(400).json({ message: "❌ Insufficient balance" });
+    }
+
+    wallet.quantity = parseFloat((wallet.quantity - amountToDeduct).toFixed(4));
+    const updatedWallet = await wallet.save();
+
+    res.status(200).json({
+      success: true,
+      message: "✅ Currency deducted successfully",
+      updatedWallet,
+    });
+  } catch (err) {
+    console.error(" Server Error:", err);
+    res.status(500).json({ message: "❌ Server error", error: err.message });
+  }
+});
+// routes/userRoutes.js
+app.post("/verify_user", async (req, res) => {
+  const { uid, phone } = req.body;
+
+  try {
+    let user = await otpVerifyModel.findOne({ uid });
+
+    if (!user) {
+      user = await otpVerifyModel.create({
+        uid,
+        phone,
+        name: "Zypto User", // optional
+      });
+    }
+
+    res.status(200).json({ success: true, user });
+  } catch (err) {
+    res.status(500).json({ error: "Server error", details: err.message });
+  }
+});
 
 
 app

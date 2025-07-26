@@ -1,9 +1,10 @@
 import {useState , useEffect} from "react"
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 export const BidItemPanel = () => {
-
+      const navigate = useNavigate();
       const [biddingnft, setbiddingnfts] = useState([]);
+      const [selectedNftId, setSelectedNftId] = useState(null);
       const userid = localStorage.getItem("id");
 
         const fetchbiddingnfts = async () =>{
@@ -12,54 +13,7 @@ export const BidItemPanel = () => {
           console.log(response.data)
         }
 
-        const handlepayment = async(nftItem, nftId)=>{
-             const amount = nftItem.userBid;
-
-              if (!amount || !nftId || !userid) {
-             alert("Bid amount , nftId and userID missing!");
-                  return;
-                          }
-            const response = await axios.post("http://localhost:5656/create_order" , {
-                amount: amount
-            });
-            console.log(response.data);
-            const {id, amount: rzpAmount ,currency} = response.data;
-            const options = {
-                  key: "rzp_test_n0bEoHKAbPgvxy",
-                   amount: rzpAmount,
-                   currency: currency,
-                   order_id: id,
-                   name: biddingnft?.nft?.name,
-              handler: async (res) => {
-             alert("Payment Succesull ");
-             try{
-                console.log("NFT ID:" , nftId);
-                console.log("USER ID:" , userid);
-                if (!nftId || !userid) {
-    
-      return;
-    }
-        const transferRes =   await axios.put(`http://localhost:5656/transferNFTOwnerShip`,{
-                    nftid: nftId,
-                    newownerId: userid
-                });
-
-                if(transferRes.data?.message){
-                   alert("NFT ownership has been transferred to your account ");
-                }else{
-                    alert("OwnerShip transferred Failed:")
-                }
-               
-             }catch(err){
-
-             }
-            },
-            
-      theme: "#4196e1",
-            }
-     const rzp = new window.Razorpay(options);
-        rzp.open();
-        }
+        
 
          useEffect(() => {
             fetchbiddingnfts(userid)
@@ -415,7 +369,7 @@ export const BidItemPanel = () => {
                                           className="d-flex align-items-center gap-1 text-sm grayscale-500 link-secondary"
                                         //   href="collection-single.html"
                                         >
-                                          {e.collection.name}
+                                          {e.collection?.name}
                                           <svg
                                             width="12"
                                             height="12"
@@ -447,15 +401,25 @@ export const BidItemPanel = () => {
 </td>
 <td>
      {e.isAuctionEnded ? (
-    e.isWinner ? (
+    e.isWinner  ? (
+      <>
         <span className="d-inline-flex ">
              <span className="text-success fw-bold h6 text-link grayscale-300">You are Winner 🎉</span>
-             <span><button  className="btn btn-primary text-sm fw-medium py-1"
-               onClick={
-                ()=>handlepayment(e, e.nft?._id)}
-             >Buy Nft</button></span>
+             <span>
+             {/* {e.nft.userid !== userid &&  */}
+             <button  className="btn btn-primary text-sm fw-medium py-1"
+              type="button"
+                  // data-bs-toggle="modal"
+                  // data-bs-target="#checkOutBackdrop"
+                //  onClick={() => setSelectedNftId(e.nft?._id)}
+               onClick={()=>navigate(`/checkout/${e.nft?._id}`)}
+             >Buy Nft</button>
+             {/* } */}
+             </span>
+              
         </span>
-     
+          {/* <CheckOutComponent nftId={} /> */}
+     </>
     ) : (
       <span className="text-danger h6  text-sm">Better luck for next time</span>
     )

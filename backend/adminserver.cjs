@@ -30,7 +30,7 @@ const walletSchema = new mongoose.Schema({
     image:"String"
 });
 const nftModel = mongoose.model("adminnfts",nftSchema);
-const walletmodel = mongoose.model("addWallet", walletSchema);
+const walletmodel = mongoose.model("createcurrency", walletSchema);
 
 const storage = multer.diskStorage({
   destination: "uploads/",

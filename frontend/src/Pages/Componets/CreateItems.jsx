@@ -82,7 +82,7 @@ export const CreateItems = () => {
                                {collections && collections.map((e)=>{
                                 return(
                                    e.nfts?.length > 0 && 
-                                   <tr className="align-middle">
+                                   <tr className="align-middle" key={e._id}>
                                   <td>
                                     <a
                                       className="d-flex gap-2"
@@ -129,7 +129,7 @@ export const CreateItems = () => {
                                     >
                                         {e.nfts &&
                                         e.nfts.slice(0 , 5).map((e)=>{
-                                          return( <img
+                                          return( <img key={e._id}
                                         className="redius card-border"
                                         alt=""
                                         src={e.image}
