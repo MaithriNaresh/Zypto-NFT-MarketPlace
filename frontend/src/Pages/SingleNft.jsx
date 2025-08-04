@@ -152,7 +152,7 @@ const SingleNft = () => {
                             </div>
 
                             {/* <!-- card 4 --> */}
-                            <div className="col text-center card-border redius p-2">
+                            {/* <div className="col text-center card-border redius p-2">
                               <div className="meta text-xs d-inline-flex align-items-center gap-2 text-bg-bs card-border redius px-2 py-1 mt-2 mb-0">
                                 Clothing
                               </div>
@@ -165,10 +165,10 @@ const SingleNft = () => {
                                   have this trait
                                 </span>
                               </div>
-                            </div>
+                            </div> */}
 
                             {/* <!-- card 5 --> */}
-                            <div className="col text-center card-border redius p-2">
+                            {/* <div className="col text-center card-border redius p-2">
                               <div className="meta text-xs d-inline-flex align-items-center gap-2 text-bg-bs card-border redius px-2 py-1 mt-2 mb-0">
                                 Type
                               </div>
@@ -181,7 +181,7 @@ const SingleNft = () => {
                                   have this trait
                                 </span>
                               </div>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                       </div>
@@ -243,7 +243,7 @@ const SingleNft = () => {
                       <div className="accordion-collapse collapse">
                         <div className="accordion-body">
                           <div className="d-flex align-items-center gap-3 py-1">
-                            {/* <!-- avater --> */}
+                          
                             <a
                               className="flex animation-2"
                               href="collections.html"
@@ -251,20 +251,20 @@ const SingleNft = () => {
                               <img
                                 className="avater xl redius border-2x card-transform-x"
                                 alt=""
-                                src="images/user/Elementals.jpg"
+                                src={snft.image}
                               />
                             </a>
 
-                            {/* <!-- content --> */}
+                            
                             <div className="flex">
-                              {/* <!-- collection name --> */}
+                              
                               <div className="d-flex align-items-center gap-2 mb-2">
-                                {/* <!-- title --> */}
+                               
                                 <a
                                   className="d-flex align-items-center gap-2 fs-6 fw-bold grayscale-200 link-secondary mb-0"
                                   href="collections.html"
                                 >
-                                  Azuki Elementals
+                                  {snft.name}
                                   <span className="text-primary">
                                     <svg
                                       width="16"
@@ -282,7 +282,7 @@ const SingleNft = () => {
                                   </span>
                                 </a>
 
-                                {/* <!-- star collection --> */}
+                               
                                 <span
                                   className="d-flex align-items-center gap-2"
                                   data-bs-toggle="tooltip"
@@ -303,9 +303,9 @@ const SingleNft = () => {
                                 </span>
                               </div>
 
-                              {/* <!-- metadata --> */}
+                             
                               <div className="filter-wrapper align-items-center gap-1 mb-2">
-                                {/* <!-- chain --> */}
+                               
                                 <a
                                   className="d-inline-flex gap-2 text-bg-bs card-border redius px-2 py-1"
                                   href="#"
@@ -326,7 +326,7 @@ const SingleNft = () => {
                                   </span>
                                 </a>
 
-                                {/* <!-- token --> */}
+                               
                                 <a
                                   className="d-inline-flex gap-2 text-bg-bs card-border redius px-2 py-1"
                                   href="#"
@@ -337,7 +337,7 @@ const SingleNft = () => {
                                   </span>
                                 </a>
 
-                                {/* <!-- categories --> */}
+                               
                                 <a
                                   className="d-inline-flex gap-2 text-bg-bs card-border redius px-2 py-1"
                                   href="#"
@@ -351,19 +351,14 @@ const SingleNft = () => {
                             </div>
                           </div>
                           <p className="mt-3">
-                            Azuki starts with a collection of 10,000 avatars
-                            that give you 🪱 membership access to The Garden: a
-                            corner of the internet where artists, builders, and
-                            web3 enthusiasts meet to create a decentralized
-                            future. Azuki holders receive access to exclusive
-                            drops, experiences, and more.
+                           {snft.description}
                           </p>
                         </div>
                       </div>
                     </div>
 
                     {/* <!-- details --> */}
-                    <div className="accordion-item">
+                    {/* <div className="accordion-item">
                       <div className="accordion-header">
                         <button
                           className="accordion-button collapsed d-flex align-items-center gap-2 h2 fw-bold mb-0"
@@ -430,7 +425,7 @@ const SingleNft = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

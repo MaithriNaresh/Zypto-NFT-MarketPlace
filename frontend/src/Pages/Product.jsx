@@ -212,7 +212,7 @@ const Product = () => {
                               <img
                                 className="circle card-border"
                                 alt=""
-                                src= {e.collectionData[0].image}
+                                src= {e.collectionData[0]?.image}
                                 width="42"
                                 height="42"
                               />

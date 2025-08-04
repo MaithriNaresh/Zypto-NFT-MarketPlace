@@ -1025,14 +1025,14 @@ app.post("/trader",
 });
 
 app.get("/gettrader", async(req , res)=>{
-  const response = await traderModel.find();
+  const response = await traderModel.find().populate("userRegister");
   res.send(response);
 });
 app.get("/gettrader/:uid", async(req , res)=>{
    
     const { uid } = req.params; 
   //  console.log("Usr ID:" ,JSON.stringify(uid))
-  const response = await traderModel.findOne({uid:uid , request : "pending"})
+  const response = await traderModel.findOne({uid:uid , request : "pending"}).populate("userRegister")
   // .sort({createDate: -1});
 
   res.send(response);

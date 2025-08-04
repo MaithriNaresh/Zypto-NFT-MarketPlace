@@ -6,8 +6,10 @@ import axios from "axios";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import FooterComponent from './Componets/FooterComponent'
+import CountDownTimer from "./CountDownTimer";
 const Auctions = () => {
   const [auction, setAuction] = useState([]);
+  const [isCountDownRunning , setIsCountDownRunning] = useState({});
   const fetchAuction = async () => {
     const response = await axios.get(
       "http://localhost:5656/getAuctionsWithNft"
@@ -17,7 +19,11 @@ const Auctions = () => {
   };
   useEffect(() => {
     fetchAuction();
+   
   }, []);
+
+
+
 
   const bidprice = (saleprice, discount) => {
     const actualprice = (saleprice * discount) / 100;
@@ -32,6 +38,12 @@ const Auctions = () => {
         <div className="d-grid grid-col-5">
           {auction &&
             auction.filter((auct) => auct.status === "accept").map((auct) => {
+              // console.log("NFT Start Date",auct.startDate)
+              const now = new Date();
+              // const startDate = new Date(auct.startDate);
+              const endDate = new Date(auct.endDate);
+              const isRunning = now<endDate 
+
               return (
                 <Link to={`/singlenft/${auct.nftData._id}`} key={auct._id}>
                   <div className="nft-card animation-1 card-border">
@@ -40,19 +52,63 @@ const Auctions = () => {
                         {/* <!-- minting --> */}
                        { <div className="d-flex align-items-center gap-2">
                           <span
-                            className="spinner-grow spinner-grow-sm text-success"
+                            // className="spinner-grow spinner-grow-sm text-success"
                             aria-hidden="true"
-                          ></span>
-                          <span className="meta text-xs fw-medium grayscale-200">
-                            Now
+                          >
+                              <svg
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <style>{`
+          @keyframes loader5 {
+            0% { transform: rotate(0); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+                        <g
+                          style={{
+                            animation: isRunning
+                              ? "loader5 1.5s linear infinite both"
+                              : "none",
+                            transformOrigin: "center center",
+                          }}
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="4"
+                            stroke="var(--brand-color)"
+                            strokeWidth="1.5"
+                          />
+                          <circle
+                            cx="17"
+                            cy="7"
+                            r="1"
+                            fill="var(--color-primary-100)"
+                          />
+                        </g>
+                      </svg>
+
+                      <CountDownTimer
+                        startDate={auct.startDate}
+                        endDate={auct.endDate}
+                        onEnd={() => setIsCountDownRunning(false)}
+                      />
                           </span>
+                         <span className="meta text-xs fw-medium grayscale-200">
+ 
+</span>
+
+
                         </div>}
                         {/* <!-- edition --> */}
-                        <div className="flex">
+                        {/* <div className="flex">
                           <span className="meta text-xs grayscale-100 link-secondary bg-dark bg-opacity-25 redius p-1 px-2 mb-0">
                             422/1,500
                           </span>
-                        </div>
+                        </div> */}
                       </div>
 
                       {/* <!-- assets --> */}
